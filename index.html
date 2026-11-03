@@ -2,13 +2,12 @@
 <html lang="ru" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Traces — Прототип</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Traces</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
   <style>
-    /* Layout: телефон по центру сцены */
     :root{
       --paper:#E9EFEC; --surface:#FFFFFF; --surface-2:#F2F5F3; --surface-3:#E6ECE9;
       --ink:#13202A; --muted:#5B6971; --line:#DCE3DF; --bezel:#13202A;
@@ -20,17 +19,6 @@
       --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
       --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
     }
-    @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-      --paper:#0B1115; --surface:#131B21; --surface-2:#1A242B; --surface-3:#22303A; --ink:#E7EDF0; --muted:#8D9BA3; --line:#26333C; --bezel:#2A3740;
-      --accent:#7A93FF; --accent-soft:#1F2A55; --on-accent:#0B1115; --sun:#FFC23D; --sun-soft:#3A2D10; --mint:#3DCB9C; --mint-soft:#123329; --danger:#FF7468;
-      --map-land:#172026; --map-block:#1E2930; --map-road:#2A3741; --map-water:#1B3447; --map-park:#1C3427; --map-label:#6F7E86;
-      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}}
-    :root[data-theme="dark"]{
-      --paper:#0B1115; --surface:#131B21; --surface-2:#1A242B; --surface-3:#22303A; --ink:#E7EDF0; --muted:#8D9BA3; --line:#26333C; --bezel:#2A3740;
-      --accent:#7A93FF; --accent-soft:#1F2A55; --on-accent:#0B1115; --sun:#FFC23D; --sun-soft:#3A2D10; --mint:#3DCB9C; --mint-soft:#123329; --danger:#FF7468;
-      --map-land:#172026; --map-block:#1E2930; --map-road:#2A3741; --map-water:#1B3447; --map-park:#1C3427; --map-label:#6F7E86;
-      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}
-
     *{box-sizing:border-box}
     [hidden]{display:none!important}
     html,body{height:100%}
@@ -41,19 +29,7 @@
     .stage{min-height:100%;display:flex;justify-content:center;align-items:center;padding:24px}
 
     /* ---------- device ---------- */
-    .device{
-  position:relative;
-  width:390px;
-  height:844px;
-  min-height:0;
-  border:10px solid var(--bezel);
-  border-radius:52px;
-  background:var(--surface);
-  box-shadow:0 30px 80px rgba(19,32,42,.25);
-  overflow:hidden;
-  flex:none;
-  transform-origin:center center;
-}
+    .device{position:relative;width:390px;height:min(844px,calc(100dvh - 48px));min-height:640px;border:10px solid var(--bezel);border-radius:52px;background:var(--surface);box-shadow:0 30px 80px rgba(19,32,42,.25);overflow:hidden;flex:none}
     .app{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;background:var(--surface)}
     .statusbar{flex:none;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 32px;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
     .statusbar .icons{display:flex;gap:6px;align-items:center}
@@ -273,8 +249,8 @@
     .toast{position:absolute;left:16px;right:16px;bottom:96px;z-index:60;background:var(--ink);color:var(--surface);border-radius:14px;padding:12px 16px;font-weight:700;font-size:14px;animation:up .25s}
 
     @media (max-width:860px){
-      .stage{padding:0}
-      .device{width:100%;height:100svh;min-height:560px;border:0;border-radius:0;box-shadow:none}
+      .stage{padding:0; min-height: 100dvh;}
+      .device{width:100%;height:100dvh;min-height:100dvh;border:0;border-radius:0;box-shadow:none}
       .statusbar{display:none}
       .hero{margin-top:0}.hero .tb{top:12px}
     }
@@ -301,7 +277,6 @@
 <script>
 (function(){
 "use strict";
-/* ---------------- helpers ---------------- */
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const MG=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
@@ -332,7 +307,6 @@ const I={
   loop:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/></svg>'
 };
 
-/* ---------------- photo illustrations ---------------- */
 let gid=0;
 const SH={
   balloons:r=>`<circle cx="${20+r*20}" cy="${90}" r="40" fill="rgba(255,255,255,.08)"/>`+[[30,38,"#FF6B8B"],[52,30,"#FFD166"],[72,42,"#7BDFF2"]].map(([x,y,c],i)=>`<path d="M${x} ${y+16} Q ${x+4} ${y+40} ${x-3+i*3} 100" stroke="rgba(255,255,255,.6)" stroke-width="1" fill="none"/><ellipse cx="${x}" cy="${y}" rx="12" ry="15" fill="${c}"/><ellipse cx="${x-4}" cy="${y-6}" rx="3" ry="5" fill="rgba(255,255,255,.45)"/>`).join(""),
@@ -358,7 +332,6 @@ const SH={
 };
 function phSVG(p){const id="g"+(++gid);return `<span class="ph"><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="${p.pal[0]}"/><stop offset="1" stop-color="${p.pal[1]}"/></linearGradient></defs><rect width="100" height="100" fill="url(#${id})"/>${SH[p.kind](p.r)}</svg></span>`}
 
-/* ---------------- data ---------------- */
 const PLACES0={
   ogni:{name:"Бар «Огни»",addr:"Покровка, 17",x:520,y:360,cat:"Бар"},
   sad:{name:"Кафе «Сад»",addr:"Маросейка, 6",x:575,y:290,cat:"Кафе"},
@@ -415,11 +388,8 @@ const unassigned=()=>Object.values(photos).filter(p=>!p.assigned);
 const pilePhotos=k=>unassigned().filter(p=>p.set===k);
 const itemsAt=pid=>items.filter(i=>i.placeId===pid);
 
-/* ---------------- log ---------------- */
 function log(msg){const t=Math.round((Date.now()-t0)/1000);logs.push({t,msg})}
-const mmss=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0");
 
-/* ---------------- nav ---------------- */
 const ROOTS=["inbox","map","calendar"];
 const NAMES={inbox:"Разбор",select:"Выбор фото",place:"Выбор места",form:"Описание события",map:"Карта",calendar:"Календарь",event:"Карточка события",placeinfo:"Карточка места"};
 function go(view,params,opt){opt=opt||{};
@@ -444,7 +414,6 @@ function render(anim){
   void sc.offsetWidth;
 }
 
-/* ---------------- map drawing ---------------- */
 function mapSVG(){
   const g=mulberry(9);let blocks="";
   for(let x=10;x<800;x+=62)for(let y=10;y<1000;y+=58){const w=40+g()*14,h=36+g()*14;blocks+=`<rect class="m-block" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>`}
@@ -460,7 +429,6 @@ function mapSVG(){
 function pinHTML(pid){const pl=places[pid],its=itemsAt(pid);const hasEv=its.some(i=>i.type==="event");const allP=its.flatMap(i=>i.photos);const last=its.slice().sort((a,b)=>a.date<b.date?1:-1)[0];
   return `<button class="pin ${hasEv?"":"place"} ${S.focus===pid?"focus":""}" style="left:${pl.x}px;top:${pl.y}px" data-act="pin" data-id="${pid}" aria-label="${esc(pl.name)}"><span class="bub">${phSVG(photos[last.photos[0]])}<span class="cnt">${allP.length}</span></span><span class="stem"></span><span class="nm">${esc(hasEv&&its.filter(i=>i.type==="event").length===1?its.find(i=>i.type==="event").title:pl.name)}</span></button>`}
 
-/* ---------------- views ---------------- */
 const VIEWS={
 inbox(){
   const keys=Object.keys(PILES).filter(k=>pilePhotos(k).length);
@@ -544,7 +512,6 @@ placeinfo(p){
 function cardHTML(i){const pl=places[i.placeId];const ev=i.type==="event";
   return `<button class="card" data-act="${ev?"openevent":"openplace"}" data-id="${ev?i.id:i.placeId}"><span class="th">${phSVG(photos[i.cover||i.photos[0]])}</span><span style="min-width:0"><span class="kind" style="color:var(--${ev?"sun":"mint"})"><span class="dot ${ev?"sun":"mint"}"></span>${ev?"Событие":"Место"}</span><b>${esc(ev?i.title:pl.name)}</b><small>${fmt(i.date)} · ${ev?esc(pl.name):i.time} · ${i.photos.length} фото</small></span><span class="muted">${I.chev}</span></button>`}
 
-/* ---------------- map behaviour ---------------- */
 let drag=null,dragMoved=false;
 function clampPos(x,y,vp){return [Math.min(0,Math.max(vp.clientWidth-800,x)),Math.min(0,Math.max(vp.clientHeight-1000,y))]}
 function setPos(x,y,anim){const vp=$("#vp"),c=$("#canvas");if(!vp)return;[x,y]=clampPos(x,y,vp);S.map.x=x;S.map.y=y;c.classList.toggle("anim",!!anim);c.style.transform=`translate(${x}px,${y}px)`}
@@ -560,7 +527,6 @@ function mountMap(){
 }
 function mountMini(){const P=PILES[S.pile],m=$("#mini"),inn=$("#miniInner");inn.style.transform=`translate(${m.clientWidth/2-P.geo[0]}px,${m.clientHeight/2-P.geo[1]+20}px)`}
 
-/* ---------------- sheets ---------------- */
 function sheet(html){$("#layer").innerHTML=`<div class="overlay"><div class="backdrop" data-act="closelayer"></div><div class="sheet"><div class="grab"></div>${html}</div></div>`}
 function actionSheet(){
   sheet(`<div class="eyebrow">${S.sel.size} ${plural(S.sel.size,"фото выбрано","фото выбрано","фото выбрано")}</div><h3 class="h1" style="font-size:22px;margin:6px 0 4px">Как сохранить эти фото?</h3>
@@ -594,7 +560,6 @@ let LB=null;
 function lightbox(listId,i){const it=items.find(x=>x.id===listId);LB={ids:it.photos,i};drawLB();log("Просмотр фото")}
 function drawLB(){const p=photos[LB.ids[LB.i]];$("#layer").innerHTML=`<div class="lightbox"><div class="lb-top"><button class="iconbtn" data-act="closelayer" aria-label="Закрыть">${I.close}</button><span class="mono">${LB.i+1} / ${LB.ids.length} · ${fmt(p.date)}, ${p.time}</span><span style="width:40px"></span></div><div class="lb-img">${phSVG(p)}</div><div style="display:flex;justify-content:center;gap:16px;padding-bottom:36px"><button class="iconbtn" data-act="lbprev" aria-label="Предыдущее">${I.back}</button><button class="iconbtn" data-act="lbnext" aria-label="Следующее" style="transform:scaleX(-1)">${I.back}</button></div></div>`}
 
-/* ---------------- actions ---------------- */
 function save(item){item.photos.forEach(id=>photos[id].assigned=item.id);items.push(item);S.lastSaved=item;S.sel=new Set();S.form={title:"",desc:"",cover:null};S.query="";success(item);render()}
 $("#app").addEventListener("click",e=>{
   const t=e.target.closest("[data-act]");if(!t)return;const a=t.dataset.act;
@@ -638,32 +603,10 @@ $("#app").addEventListener("input",e=>{
   if(e.target.id==="q"){S.query=e.target.value;const pos=e.target.selectionStart;const list=document.querySelector(".plist");const tmp=document.createElement("div");tmp.innerHTML=VIEWS.place();list.replaceWith(tmp.querySelector(".plist"));document.querySelector(".sect.eyebrow").textContent=S.query.trim()?"Результаты":"Рядом с местом съёмки";e.target.setSelectionRange(pos,pos)}
 });
 
-/* ---------------- panel (скрыта, оставлена только для сброса) ---------------- */
 function tick(){const now=new Date();$("#clock").textContent=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0")}
 
 seed();tick();setInterval(tick,30000);
 log("Прототип открыт");render("fade");
-})();
-</script>
-<script>
-(function fit(){
-  function apply(){
-    if (window.innerWidth <= 860) {
-      document.querySelector('.device').style.transform = 'none';
-      return;
-    }
-    var d = document.querySelector('.device');
-    if (!d) return;
-    var pad = 32;
-    var scale = Math.min(
-      (window.innerWidth  - pad) / 410,
-      (window.innerHeight - pad) / 864
-    );
-    d.style.transform = 'scale(' + Math.min(scale, 1) + ')';
-  }
-  window.addEventListener('resize', apply);
-  window.addEventListener('load', apply);
-  apply();
 })();
 </script>
 </body>
