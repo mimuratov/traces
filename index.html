@@ -648,12 +648,10 @@ log("Прототип открыт");render("fade");
 <script>
 (function fit(){
   function apply(){
-    // Если ширина экрана меньше 860px (телефон), ничего не сжимаем
     if (window.innerWidth <= 860) {
       document.querySelector('.device').style.transform = 'none';
       return;
     }
-    // Для ноутбуков и больших экранов оставляем сжатие
     var d = document.querySelector('.device');
     if (!d) return;
     var pad = 32;
