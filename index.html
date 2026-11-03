@@ -648,6 +648,12 @@ log("Прототип открыт");render("fade");
 <script>
 (function fit(){
   function apply(){
+    // Если ширина экрана меньше 860px (телефон), ничего не сжимаем
+    if (window.innerWidth <= 860) {
+      document.querySelector('.device').style.transform = 'none';
+      return;
+    }
+    // Для ноутбуков и больших экранов оставляем сжатие
     var d = document.querySelector('.device');
     if (!d) return;
     var pad = 32;
@@ -655,8 +661,7 @@ log("Прототип открыт");render("fade");
       (window.innerWidth  - pad) / 410,
       (window.innerHeight - pad) / 864
     );
-    scale = Math.min(scale, 1);
-    d.style.transform = 'scale(' + scale + ')';
+    d.style.transform = 'scale(' + Math.min(scale, 1) + ')';
   }
   window.addEventListener('resize', apply);
   window.addEventListener('load', apply);
